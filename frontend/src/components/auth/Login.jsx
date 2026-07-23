@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setUser} from "@/redux/authSlice";
+import { setLoading, setUser } from "@/redux/authSlice";
 import { Loader, Loader2 } from "lucide-react";
 
 const login = () => {
@@ -18,8 +18,8 @@ const login = () => {
     password: "",
     role: "",
   });
-  
-  const {loading} = useSelector(store=>store.auth);
+
+  const { loading,user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const changeEventHandler = (e) => {
@@ -44,10 +44,15 @@ const login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Something went wrong");
-    }finally{
+    } finally {
       dispatch(setLoading(false));
     }
   };
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -108,15 +113,19 @@ const login = () => {
               </div>
             </RadioGroup>
           </div>
-          {
-            loading?<Button className="w-full my-4"><Loader2 className="mr-2 h-4 w-4 animate-spin"/>Please wait</Button> : <Button
-            type="submit"
-            className="w-full bg-black text-white hover:bg-black/90 mt-6 py-5 text-base font-semibold"
-          >
-            Login
-          </Button>
-          }
-         
+          {loading ? (
+            <Button className="w-full my-4">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full bg-black text-white hover:bg-black/90 mt-6 py-5 text-base font-semibold"
+            >
+              Login
+            </Button>
+          )}
 
           <span className="text-sm block text-center mt-4 text-gray-600">
             Don't have an account?{" "}

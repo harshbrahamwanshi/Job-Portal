@@ -22,7 +22,7 @@ const signup = () => {
     file: "",
   });
 
-   const {loading} = useSelector(store=>store.auth);
+   const {loading,user} = useSelector(store=>store.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -64,6 +64,11 @@ const signup = () => {
           dispatch(setLoading(false));
         }
   };
+    useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
