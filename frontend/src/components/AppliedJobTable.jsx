@@ -1,69 +1,37 @@
-import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
-import { Badge } from "./ui/badge";
+import React from 'react'
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from './ui/table'
+import { Badge } from './ui/badge'
+import { useSelector } from 'react-redux'
 
 const AppliedJobTable = () => {
-  return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-xl p-6">
-      <Table>
-        <TableCaption className="text-gray-500 text-sm mt-4">
-          A list of applied jobs
-        </TableCaption>
+    const {allAppliedJobs} = useSelector(store=>store.job);
+    return (
+        <div>
+            <Table>
+                <TableCaption>A list of your applied jobs</TableCaption>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Job Role</TableHead>
+                        <TableHead>Company</TableHead>
+                        <TableHead className="text-right">Status</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {
+                        allAppliedJobs.length <= 0 ? <span>You haven't applied any job yet.</span> : allAppliedJobs.map((appliedJob) => (
+                            <TableRow key={appliedJob._id}>
+                                <TableCell>{appliedJob?.createdAt?.split("T")[0]}</TableCell>
+                                <TableCell>{appliedJob.job?.title}</TableCell>
+                                <TableCell>{appliedJob.job?.company?.name}</TableCell>
+                                <TableCell className="text-right"><Badge className={`${appliedJob?.status === "rejected" ? 'bg-red-400' : appliedJob.status === 'pending' ? 'bg-gray-400' : 'bg-green-400'}`}>{appliedJob.status.toUpperCase()}</Badge></TableCell>
+                            </TableRow>
+                        ))
+                    }
+                </TableBody>
+            </Table>
+        </div>
+    )
+}
 
-        <TableHeader>
-          <TableRow className="bg-gradient-to-r from-violet-100 to-purple-100 hover:from-violet-100 hover:to-purple-100">
-            <TableHead className="font-bold text-gray-700 py-4">
-              Date
-            </TableHead>
-            <TableHead className="font-bold text-gray-700">
-              Job Role
-            </TableHead>
-            <TableHead className="font-bold text-gray-700">
-              Company
-            </TableHead>
-            <TableHead className="text-right font-bold text-gray-700">
-              Status
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {[1, 2].map((item, index) => (
-            <TableRow
-              key={index}
-              className="transition-all duration-300 hover:bg-violet-50 hover:scale-[1.01] cursor-pointer"
-            >
-              <TableCell className="font-medium text-gray-600 py-5">
-                22-07-2026
-              </TableCell>
-
-              <TableCell className="font-semibold text-gray-900">
-                FrontEnd Developer
-              </TableCell>
-
-              <TableCell className="font-medium text-gray-700">
-                Google
-              </TableCell>
-
-              <TableCell className="text-right">
-                <Badge className="bg-green-100 text-green-700 border border-green-300 hover:bg-green-100 rounded-full px-4 py-1 text-sm font-semibold">
-                  Selected
-                </Badge>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-};
-
-export default AppliedJobTable;
+export default AppliedJobTable

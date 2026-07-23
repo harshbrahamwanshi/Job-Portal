@@ -33,6 +33,7 @@
     "react-redux": "^9.3.0",
     "react-router-dom": "^6.30.4",
     "redux-persist": "^6.0.0",
+    "select": "^1.1.2",
     "shadcn": "^4.13.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.3.0",
